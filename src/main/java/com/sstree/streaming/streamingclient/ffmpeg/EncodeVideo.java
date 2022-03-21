@@ -27,7 +27,7 @@ public class EncodeVideo {
      * output nginx로 flv
      * output 로컬로 .mp4
      */
-    public Object videoEncode(){
+    public void videoEncode(){
         FFmpegBuilder builder = new FFmpegBuilder()
                 .addExtraArgs("-rtbufsize", "15M")// 버퍼사이즈 수정
                 .addExtraArgs("-re")
@@ -48,9 +48,9 @@ public class EncodeVideo {
                 .setVideoFrameRate(30)  // 내 노트북은 30프레임까지만 가능 video frame rate (-r)
                 .addExtraArgs("-preset", "medium")
                 .addExtraArgs("-f","flv")
-                .addExtraArgs("rtmp://sstree@172.30.85.109:1935/live")
+                .addExtraArgs(pathConfig.getRtmpPath() + "/" + pathConfig.getVideoName())
                 .done();
         executor.createJob(builder).run();
-        return builder;
+
     }
 }
