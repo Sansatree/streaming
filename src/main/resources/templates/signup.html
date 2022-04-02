@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" >
+<head >
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <form id="form" name="form" th:action="@{/signup}" method="post" th:object="${userDto}" >
+
+        <div>
+            <label>아이디</label>
+            <input th:field="*{userId}" type="text" placeholder="아이디를 입력하세요." >
+            <button type="button">중복 확인</button>
+        </div>
+
+        <div>
+            <label>이메일</label>
+            <input th:field="*{email}" type="text" placeholder="이메일을 입력하세요.">
+            <p></p>
+        </div>
+
+        <div>
+            <label>비밀 번호</label>
+            <input th:field="*{password}" type="password">
+        </div>
+
+        <div>
+            <input type="button" onclick="ajax_send()" value="회원 가입" >
+            <button type="button" th:onclick="|location.href='@{/login-page}'|">취 소</button>
+        </div>
+    </form>
+<script>
+function ajax_send(){
+    function objectifyForm(formArray){
+        var returnArray = {};
+        for (var i = 0; i < formArray.length; i++) {
+            returnArray[formArray[i]['name']] = formArray[i]['value'];
+            }
+            return returnArray;
+    }
+     var formData = $("#form").serializeArray();
+     $.ajax({
+        url : '/signup',
+        type : 'POST',
+        contentType : 'application/json',
+        data : JSON.stringify(objectifyForm(formData)),
+        success : function(data) {
+            console.log(data);
+        },
+        error : function(error) {
+            console.log(error);
+        }
+     });
+
+     $('form').each(function(){
+    this.reset();
+  });
+    return false;
+}
+</script>
+</body>
+</html>
