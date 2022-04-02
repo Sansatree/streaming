@@ -9,6 +9,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Entity
@@ -17,12 +20,12 @@ import java.util.Collection;
 public class User implements UserDetails {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "member_id")
     private Long id; // Primary Key
 
     @Column(unique = true)
     @NotNull
-    private String userId;
+    private String username;
 
     @Column(unique = true)
     private String email;
@@ -31,36 +34,30 @@ public class User implements UserDetails {
     @NotNull
     private String password;
 
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles = new ArrayList<>();
+
 
     @Builder
-    public User( String userId, String email, String password ,Role role) {
-        this.userId = userId;
+    public User(String username, String email, String password , List<String> roles) {
+        this.username = username;
         this.email = email;
         this.password = password;
-        this.role = role;
+        this.roles = Collections.singletonList(Role.ROLE_USER.name());
 
     }
-
+    public User(String username, String password, Collection<? extends GrantedAuthority> roles) {
+        this.username = username;
+        this.password = password;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<GrantedAuthority> auth = new ArrayList<>();
-        auth.add(() -> "ROLE_" + this.getRole());
-        return auth;
+        return this.roles.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
 
-    @Override
-    public String getPassword() {
-        return this.getPassword();
-    }
-
-    @Override
-    public String getUsername() {
-        return this.getUserId();
-    }
 
     /**
      * 계정의 만료 여부

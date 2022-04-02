@@ -3,32 +3,27 @@
 <head>
 </head>
 <body>
-<div class="container">
 
-<form method="post" th:action="@{/login-page}" class="form-login">
-    <div class="box">
-
+<form th:action="@{/login-page}" method="post">
         <div class="title">LOGIN</div>
 
-        <div class="input">
-            <label for="name">Username</label>
-            <input type="text" name="name" id="name">
+        <div>
+            <label>Username</label>
+            <input type="text" name="username">
         </div>
 
-        <div class="input">
-            <label for="pass">Password</label>
-            <input type="password" name="pass" id="pass">
+        <div>
+            <label>Password</label>
+            <input type="password" name="password">
         </div>
 
-        <div class="button login">
-            <button type="submit">로그인</button>
+        <div>
+            <button type="submit" >로그인</button>
         </div>
-        <div class="button signup">
+        <div>
             <button type="button" th:onclick="|location.href='@{/signup}'|">회원가입</button>
         </div>
-    </div>
 </form>
-</div>
 
 
 </body>

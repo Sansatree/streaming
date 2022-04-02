@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Slf4j
 public class LiveStreamController {
 
+
     @GetMapping("/livestream/hls")
     public String videoHls(){
-
         return "livestream/hls";
     }
 }

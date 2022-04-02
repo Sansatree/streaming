@@ -26,6 +26,7 @@ public class UserController {
 
         return "login-page";
     }
+
     @GetMapping("/signup")
     public String signup(UserDto userDto){
 
