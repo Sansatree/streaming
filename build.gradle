@@ -26,6 +26,10 @@ dependencies {
 	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.13.2'
 	//ffmpeg
 	implementation group: 'net.bramp.ffmpeg', name: 'ffmpeg', version: '0.6.2'
+	//jjwt
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.2'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
 
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'

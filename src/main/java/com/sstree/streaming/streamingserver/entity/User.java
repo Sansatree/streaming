@@ -3,7 +3,6 @@ package com.sstree.streaming.streamingserver.entity;
 import com.sun.istack.NotNull;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
@@ -17,7 +16,7 @@ import java.util.Collection;
 public class User implements UserDetails {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "member_id")
     private Long id; // Primary Key
 
     @Column(unique = true)
