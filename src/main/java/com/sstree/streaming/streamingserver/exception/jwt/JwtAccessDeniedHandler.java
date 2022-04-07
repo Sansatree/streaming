@@ -1,4 +1,4 @@
-package com.sstree.streaming.streamingserver.jwt.exception;
+package com.sstree.streaming.streamingserver.exception.jwt;
 
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;

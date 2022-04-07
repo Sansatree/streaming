@@ -1,4 +1,4 @@
-package com.sstree.streaming.streamingserver.jwt.exception;
+package com.sstree.streaming.streamingserver.exception.jwt;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;

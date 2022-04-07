@@ -10,10 +10,7 @@ public class StreamingserverApplication {
 
 	public static void main(String[] args) throws IOException {
 		SpringApplication.run(StreamingserverApplication.class, args);
-//
-//		FfmpegHls ffmpegHls = new FfmpegHls();
-//
-//		ffmpegHls.hlsStream();
+
 	}
 
 }

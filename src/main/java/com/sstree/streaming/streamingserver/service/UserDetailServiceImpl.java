@@ -1,16 +1,20 @@
 package com.sstree.streaming.streamingserver.service;
 
-import com.sstree.streaming.streamingserver.service.dto.UserDto;
-import com.sstree.streaming.streamingserver.entity.User;
+import com.sstree.streaming.streamingserver.entity.Users;
 import com.sstree.streaming.streamingserver.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import javax.transaction.Transactional;
+import java.util.Collections;
+
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class UserDetailServiceImpl implements UserDetailsService {
@@ -18,30 +22,25 @@ public class UserDetailServiceImpl implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
-//    @Transactional
+    @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        log.info("===========UserServiceDetailsImpl============");
+        log.info("username {}", username);
+
         return userRepository.findByUsername(username)
                 .map(this::createUserDetails)
-                .orElseThrow(() -> new UsernameNotFoundException(username + "아이디가 없습니다."));
+                .orElseThrow(() -> new UsernameNotFoundException( "해당 아이디가 없습니다."));
     }
 
+    private UserDetails createUserDetails(Users users) {
+        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(users.getRole().toString());
+        log.info("createUserDetails {}" , grantedAuthority );
+        return new org.springframework.security.core.userdetails.User(
+                users.getUsername(),
+                users.getPassword(),
+                Collections.singleton(grantedAuthority));
 
-    private UserDetails createUserDetails(User user){
-        return new User(user.getUsername(),user.getPassword(),user.getAuthorities());
-    }
-
-    @Transactional
-    public Long saveUser(UserDto userDto){
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
-
-        if (userRepository.existsByUsername(userDto.getUsername())){
-            throw new RuntimeException("이미 가입한 아이디입니다.");
-        }
-        return userRepository.save(userDto.toEntity()).getId();
 
     }
-
-
 
 }
