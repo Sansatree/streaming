@@ -5,7 +5,7 @@
 </head>
 
 <body>
-    <form id="form" name="form" th:action="@{/signup}" method="post" th:object="${userRequestDto}" >
+    <form id="form" name="form" th:action="@{/auth/signup}" method="post" th:object="${userRequestDto}" >
 
         <div>
             <label>아이디</label>
@@ -25,7 +25,7 @@
 
         <div>
             <input type="button" onclick="ajax_send()" value="회원 가입" >
-            <button type="button" th:onclick="|location.href='@{/login-page}'|">취 소</button>
+            <button type="button" th:onclick="|location.href='@{/login}'|">취 소</button>
         </div>
     </form>
 <script>
@@ -39,7 +39,7 @@ function ajax_send(){
     }
      var formData = $("#form").serializeArray();
      $.ajax({
-        url : '/signup',
+        url : '/auth/signup',
         type : 'POST',
         contentType : 'application/json',
         data : JSON.stringify(objectifyForm(formData)),

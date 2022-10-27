@@ -25,11 +25,6 @@ public class Users {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-//        @Column
-//        @ElementCollection(fetch = FetchType.EAGER)
-//        private List<String> roles = new ArrayList<>();
-
-
 
     @Builder
     public Users(String username, String password, Role role) {

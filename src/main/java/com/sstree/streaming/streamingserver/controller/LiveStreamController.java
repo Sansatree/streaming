@@ -12,10 +12,10 @@ import org.springframework.web.servlet.ModelAndView;
 @Slf4j
 public class LiveStreamController {
 
-    @GetMapping(value = "/login-page")
+    @GetMapping("/login")
     public ModelAndView login(UserRequestDto userRequestDto){
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("login-page");
+        modelAndView.setViewName("login");
         modelAndView.addObject(userRequestDto);
         return modelAndView;
     }
@@ -24,7 +24,6 @@ public class LiveStreamController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("signup");
         modelAndView.addObject(userRequestDto);
-
         return modelAndView;
     }
     @GetMapping("/livestream/hls")

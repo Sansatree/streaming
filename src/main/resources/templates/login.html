@@ -5,7 +5,7 @@
 </head>
 <body>
 
-<form name="form" id="form" th:action="@{/login-page}" th:object="${userRequestDto}" method="post">
+<form name="form" id="form" th:action="@{/auth/login}" th:object="${userRequestDto}" method="post">
         <div class="title">LOGIN</div>
 
         <div>
@@ -40,7 +40,7 @@
     }
      var formData = $("#form").serializeArray();
      $.ajax({
-        url : '/login-page',
+        url : '/login',
         type : 'POST',
         contentType : 'application/json',
         data : JSON.stringify(objectifyForm(formData)),
@@ -51,7 +51,6 @@
             console.log(error);
         }
      });
-
      $('form').each(function(){
     this.reset();
   });
@@ -65,7 +64,7 @@
 function storage() {
 const username = document.getElementById('username').value;
 const password = document.getElementById('password').value;
-fetch("/login-page",{
+fetch("/login",{
     method: "get",
     headers: {
         'content-type' : 'application/json'
@@ -87,7 +86,7 @@ function before(){
     var token = cookie.getItem("token");
     $.ajax({
         type: "POST",
-        url: "/login-page",
+        url: "/login",
         beforeSend: function (xhr) {
             xhr.setRequestHeader("Content-type","application/json");
             xhr.setRequestHeader("Authorization","Bearer " + token);

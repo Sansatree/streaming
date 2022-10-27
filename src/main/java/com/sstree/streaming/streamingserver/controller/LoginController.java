@@ -11,11 +11,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 
 @Slf4j
 @RestController
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 public class LoginController {
 
@@ -27,16 +33,16 @@ public class LoginController {
         return ResponseEntity.ok(userService.saveUser(userRequestDto));
     }
 
-    @PostMapping(value = "/login-page" )
-    public ResponseEntity<TokenDto> login(@RequestBody UserRequestDto userRequestDto){
-    log.info("-============================= controller");
-
-        return ResponseEntity.ok(userService.login(userRequestDto));
+    @PostMapping(value = "/login" )
+    public TokenDto login(@RequestBody UserRequestDto userRequestDto) throws IOException {
+        log.info("로그인 컨트롤러 동작");
+        return null;
     }
-
     @PostMapping("/reissue")
-    public ResponseEntity<TokenDto> reissue(@RequestBody TokenRequestDto TokenRequestDto) {
-        return ResponseEntity.ok(userService.reissue(TokenRequestDto));
+    public ResponseEntity<TokenDto> reissue(HttpServletResponse response, @RequestBody TokenRequestDto tokenRequestDto) throws IOException {
+        log.info("리이슈 컨트롤러 동작");
+//        return ResponseEntity.ok(jwtTokenProvider.reissue(response,tokenRequestDto));
+        return null;
     }
 
 }
