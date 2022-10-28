@@ -25,7 +25,6 @@ public class Users {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-
     @Builder
     public Users(String username, String password, Role role) {
         this.username = username;

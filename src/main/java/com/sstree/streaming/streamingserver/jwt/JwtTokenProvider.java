@@ -2,7 +2,6 @@ package com.sstree.streaming.streamingserver.jwt;
 
 import com.sstree.streaming.streamingserver.entity.RefreshToken;
 import com.sstree.streaming.streamingserver.repository.RefreshTokenRepository;
-import com.sstree.streaming.streamingserver.service.dto.TokenDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -44,7 +43,7 @@ public class JwtTokenProvider {
     }
 
     // Access Token 생성
-    public String createAccessToken(Authentication authentication){
+    public String createAccessToken(Authentication authentication) {
         //권한 가져오기
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -61,8 +60,9 @@ public class JwtTokenProvider {
                 .compact();
 
     }
+
     //Refresh Token 생성
-    public String createRefreshToken(Authentication authentication){
+    public String createRefreshToken(Authentication authentication) {
         //권한 가져오기
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -70,14 +70,14 @@ public class JwtTokenProvider {
         long now = (new Date()).getTime();
         return Jwts.builder()
                 .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME)) // refreshToken 유효시간
-                .claim(AUTHORITIES_KEY,authorities)
+                .claim(AUTHORITIES_KEY, authorities)
                 .signWith(key, SignatureAlgorithm.HS512) // key 암호화 알고리즘
                 .compact();
 
     }
 
     @Transactional
-    public String reissue(HttpServletResponse response,String accessToken,String refreshToken) throws RuntimeException{
+    public String reissue(HttpServletResponse response, String accessToken, String refreshToken) throws RuntimeException {
         // 1. Access Token 에서 Member ID 가져오기
         Authentication authentication = getAuthentication(accessToken);
         // 2. 저장소에서 Member ID 를 기반으로 Refresh Token 값 가져옴
@@ -85,7 +85,7 @@ public class JwtTokenProvider {
                 .orElseThrow(() -> new UsernameNotFoundException("refreshToken key : " + authentication.getName() + "이 일치하지 않습니다."));
 
         log.info("get.value refreshToken = {} ", findRefreshToken.getValue());
-        log.info("refreshToken = {}" , refreshToken);
+        log.info("refreshToken = {}", refreshToken);
         if (findRefreshToken.getValue().equals(refreshToken)) {
             String createAccessToken = createAccessToken(authentication);
             Cookie cookie = new Cookie("token", "Bearer" + createAccessToken);
@@ -94,18 +94,18 @@ public class JwtTokenProvider {
 
             response.addCookie(cookie);
             return createAccessToken;
-        }else{
+        } else {
             throw new RuntimeException("토큰의 유저 정보가 일치하지 않습니다.");
         }
     }
 
 
     //JWT 토큰을 복호화하여 토큰에 들어있는 정보를 꺼내는 메서드
-    public Authentication getAuthentication(String accessToken){
+    public Authentication getAuthentication(String accessToken) {
         //토큰 복호화
         Claims claims = parseClaims(accessToken);
 
-        if(claims.get(AUTHORITIES_KEY) == null){
+        if (claims.get(AUTHORITIES_KEY) == null) {
             throw new RuntimeException("권한 정보가 없는 토큰입니다.");
         }
         // Claims에서 권한 정보 가져오기
@@ -116,9 +116,7 @@ public class JwtTokenProvider {
 
         //UserDetails 객체를 만들어서 Authentication 리턴
         UserDetails principal = new User(claims.getSubject(), "", authorities);
-
-        return new UsernamePasswordAuthenticationToken(principal, "",authorities);
-
+        return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
 
 
@@ -146,13 +144,12 @@ public class JwtTokenProvider {
             return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
         } catch (ExpiredJwtException e) {
             return e.getClaims();
-
         }
     }
-    public static enum JwtCode{
+
+    public static enum JwtCode {
         DENIED,
         ACCESS,
         EXPIRED;
     }
-
 }
