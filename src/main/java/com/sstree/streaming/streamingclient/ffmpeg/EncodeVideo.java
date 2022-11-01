@@ -35,17 +35,17 @@ public class EncodeVideo {
                 .addInput("video=\"WebCam\":audio=\"Microphone\"")
                 .addOutput(pathConfig.getOutputMp4Path() + "\\" + pathConfig.getVideoName() + ".mp4")
                 .setVideoCodec("libx264") // x264는 cpu 사용, h.264는 Gpu 사용
-                .addExtraArgs("-bufsize", "4000k")  //버퍼사이즈
-                .addExtraArgs("-minrate", "1000k") //migrate???
-                .addExtraArgs("-maxrate", "1000k") //비트레이트 수정 ??minrate는 왜 없을까??
+                .addExtraArgs("-bufsize", "5000k")  //버퍼사이즈
+                .addExtraArgs("-minrate", "1000k") //
+                .addExtraArgs("-maxrate", "5000k")
                 .setAudioCodec("aac") // 오디오 코덱 aac
                 .setAudioSampleRate(FFmpeg.AUDIO_SAMPLE_44100) //오디오 표준 sample rate 값(44.1khz)
-                .setAudioBitRate(1_280_000)  // 오디오 비트레이트 128K로 수정
+                .setAudioBitRate(1_600_000)  // 오디오 비트레이트 128K로 수정
                 .addExtraArgs("-profile:v", "baseline")
-                .setVideoPixelFormat("yuv420p") // 지정해야 하나???
-                .setVideoResolution(426, 240) // videosize (-s)
+                .setVideoPixelFormat("yuv420p")
+                .setVideoResolution(1280, 720) // videosize (-s)
                 .setVideoBitRate(2_000_000)
-                .setVideoFrameRate(30)  // 내 노트북은 30프레임까지만 가능 video frame rate (-r)
+                .setVideoFrameRate(60)  // 내 노트북은 30프레임까지만 가능 video frame rate (-r)
                 .addExtraArgs("-preset", "medium")
                 .addExtraArgs("-f","flv")
                 .addExtraArgs(pathConfig.getRtmpPath() + "/" + pathConfig.getVideoName())
