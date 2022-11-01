@@ -1,0 +1,101 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+
+<form name="form" id="form" th:action="@{/auth/login}" th:object="${userRequestDto}" method="post">
+        <div class="title">LOGIN</div>
+
+        <div>
+            <label>Username</label>
+            <input type="text" th:text="*{username}" id="username" name="username">
+        </div>
+
+        <div>
+            <label>Password</label>
+            <input type="password" th:text="*{password}" id="password" name="password" >
+        </div>
+
+
+        <div>
+            <input type="button" value="login" onclick="storage()">
+
+            <button type="submit">로그인</button>
+        </div>
+        <div>
+            <button type="button" th:onclick="|location.href='@{/signup}'|">회원가입</button>
+        </div>
+
+</form>
+<script>
+    function ajax_send(){
+    function objectifyForm(formArray){
+        var returnArray = {};
+        for (var i = 0; i < formArray.length; i++) {
+            returnArray[formArray[i]['name']] = formArray[i]['value'];
+            }
+            return returnArray;
+    }
+     var formData = $("#form").serializeArray();
+     $.ajax({
+        url : '/login',
+        type : 'POST',
+        contentType : 'application/json',
+        data : JSON.stringify(objectifyForm(formData)),
+        success : function(data) {
+            console.log(data);
+        },
+        error : function(error) {
+            console.log(error);
+        }
+     });
+     $('form').each(function(){
+    this.reset();
+  });
+  $('form').submit();
+
+    return false;
+
+}
+
+
+function storage() {
+const username = document.getElementById('username').value;
+const password = document.getElementById('password').value;
+fetch("/login",{
+    method: "get",
+    headers: {
+        'content-type' : 'application/json'
+        },
+    body: JSON.stringify({
+        username : ${username},
+        password : ${password}
+        })
+    }).then(res => res.json())
+        .then(token => {
+            localStorage.setItem("Bearer ", token.accessToken)
+            alert("login ok");});
+
+    $('form').submit();
+}
+
+
+function before(){
+    var token = cookie.getItem("token");
+    $.ajax({
+        type: "POST",
+        url: "/login",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Content-type","application/json");
+            xhr.setRequestHeader("Authorization","Bearer " + token);
+        },
+        success: function (res) {
+            console.log(res);
+        }
+    });
+}
+</script>
+</body>
+</html>
