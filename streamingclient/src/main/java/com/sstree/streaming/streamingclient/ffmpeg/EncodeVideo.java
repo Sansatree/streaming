@@ -24,8 +24,8 @@ public class EncodeVideo {
     /**
      * 로컬카메라로 녹화
      * encode h264,aac
-     * output nginx로 flv
-     * output 로컬로 .mp4
+     * output .mp4로 저장
+     * output 서버에 flv파일 전송
      */
     public void videoEncode(){
         FFmpegBuilder builder = new FFmpegBuilder()
